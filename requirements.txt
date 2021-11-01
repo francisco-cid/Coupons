@@ -1,0 +1,7 @@
+click
+Flask
+Flask-Cors
+Flask-SQLAlchemy
+html-testRunner
+psycopg2-binary
+SQLAlchemy
