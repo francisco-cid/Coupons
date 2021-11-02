@@ -5,7 +5,8 @@ from sample_coupons import sample_coupons
 def add_sample_coupons():
     for coupon in sample_coupons:
         newCoupon = Coupon(id = coupon["id"], title=coupon["title"], desc=coupon["desc"],
-            request_by=coupon["request_by"], requested_for=coupon["requested_for"], used=coupon["used"])
+            request_by=coupon["request_by"], requested_for=coupon["requested_for"], used=coupon["used"],
+            image=coupon["image"])
         db.session.add(newCoupon)
         db.session.commit()
 

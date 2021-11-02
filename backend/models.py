@@ -25,3 +25,4 @@ class Coupon(db.Model):
     request_by = db.Column(db.String(500), nullable=True)
     requested_for = db.Column(db.DateTime, nullable=True)
     used = db.Column(db.Boolean, nullable=False)
+    image = db.Column(db.String, nullable=True)
