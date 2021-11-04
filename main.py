@@ -14,6 +14,7 @@ def get_coupons():
         coupon_dict["requested_for"] = coupon.requested_for
         coupon_dict["used"] = coupon.used
         coupon_dict["image"] = coupon.image
+        coupon_dict["color"] = coupon.color
         response.append(coupon_dict.copy())
     return make_response({'coupons':response},200)
 if __name__ == "__main__":

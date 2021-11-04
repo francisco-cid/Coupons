@@ -61,3 +61,7 @@
 .bottom-buffer {
   margin-bottom: 20px;
 }
+
+.small-text{
+  font-size: 10px;
+}
