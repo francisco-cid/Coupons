@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import {FaCut} from 'react-icons/fa'
 import {Card, Container, Row, Col, Button} from "react-bootstrap";
 
-Axios.defaults.baseURL = 'http://172.31.27.98:8080/';
+Axios.defaults.baseURL = 'http://54.85.18.85:8080';
 
 function App() {
     const [coupons, setCoupons] = useState([]);
