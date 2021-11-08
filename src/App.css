@@ -65,3 +65,12 @@
 .small-text{
   font-size: 10px;
 }
+
+.blur {
+  -webkit-filter: blur(20px);
+  /*-moz-filter: blur(20px);*/
+  /*-o-filter: blur(100px);*/
+  /*-ms-filter: blur(100px);*/
+  /*filter: blur(20px);*/
+  /*background-color: #ccc;*/
+}

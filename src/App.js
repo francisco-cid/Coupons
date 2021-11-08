@@ -1,103 +1,210 @@
 import './App.css';
 import Axios from 'axios';
-import React, { useState, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import 'bootstrap/dist/css/bootstrap.css';
-import {Card, Container, Row, Col} from "react-bootstrap";
-Axios.defaults.baseURL = 'http://192.168.1.227:8000';
+import {FaCut} from 'react-icons/fa'
+import {Card, Container, Row, Col, Button} from "react-bootstrap";
+
+Axios.defaults.baseURL = 'http://10.145.166.9:8000';
 
 function App() {
-  const [coupons, setCoupons] = useState(["initgroup"]);
-  const coupArray = [{"id":1, "title":"Back Massage", "desc":"I will give you 30 minute back massage", "request_by":"2 hours",
-      "requested_for":null, "used":false, "color":"primary",
-      "image":"https://www.clipartmax.com/png/full/324-3245215_clip-library-back-massage-clip-art.png"
-  },
-      {"id":2, "title":"Esther's Lasagna", "desc":"Esther will make you a lasagna", "request_by":"10 days",
-          "requested_for":null, "used":false, "color":"secondary",
-          "image":"https://www.clipartmax.com/png/full/143-1434384_greet-garfield-in-munzee-in-garfield-black-and-white.png"
-      },
-      {"id":3, "title":"Esther's Nopales", "desc":"Esther will make you a nopales salad", "request_by":"7 days",
-          "requested_for":null, "used":false, "color":"success",
-          "image":"https://www.clipartmax.com/png/full/0-3121_black-clipart-cactus-cactus-black-and-white.png"
-      },
-      {"id":4, "title":"Morning Bedside Service",
-          "desc":"I will wake up before you and make you breakfast, serve you coffee, and do anything else you'd want me to do",
-          "request_by":"12 hours", "requested_for":null, "used":false, "color":"danger",
-          "image":"https://www.clipartmax.com/png/full/1-13065_coffee-cup-clip-art-coffee-cup-clip-art.png"
-      },
-      {"id":5, "title":"Homework Help", "desc":"I will dedicate 4 hours to help you on a school assignment of your choice",
-          "request_by":"3 days", "requested_for":null, "used":false, "color":"warning",
-          "image":"https://www.clipartmax.com/png/full/14-145197_homework-homework-icon-black-and-white.png"
-      },
-      {"id":6, "title":"Clean Kitchen", "desc":"I will wash dishes, wipe surfaces, and sweep your kitchen",
-          "request_by":"24 hours", "requested_for":null, "used":false, "color":"info",
-          "image":"https://www.clipartmax.com/png/full/89-899344_cleaning-spray-gun-comments-clip-art-clean-spray.png"
-      },
-      {"id":7, "title":"Clean Bathroom", "desc":"I will scrub your shower, clean your toilet and sinks, and vacuum your bathroom",
-          "request_by":"24 hours", "requested_for":null, "used":false, "color":"light",
-          "image":"https://www.clipartmax.com/png/full/37-378368_how-to-start-potty-training-a-resource-guide-my-bored-clip-art.png"
-      },
-      {"id":8, "title":"Starbucks Run", "desc":"I will wake up early and get you a starbucks drink for when you wake up",
-          "request_by":"12 hours", "requested_for":null, "used":false, "color":"dark",
-          "image":"https://www.clipartmax.com/png/full/102-1021317_additionally-starbucks-constant-engagement-with-fans-starbucks-gift-card-value.png"
-      },
-      {"id":9, "title":"Clean your fridge", "desc":"I will throw out anything that's gone bad, and wipe down surfaces in your fridge",
-          "request_by":null, "requested_for":null, "used":false, "color":"primary",
-          "image":"https://www.clipartmax.com/png/full/117-1176506_stainless-steel-fridge-sprite-015-club-penguin-fridge.png"
-      },
-      {"id":10, "title":"Inwood Sleepover", "desc":"I will spend the night at inwood with you", "request_by":"8 hours",
-          "requested_for":null, "used":false, "color":"success",
-          "image":"https://www.clipartmax.com/png/full/2-21103_home-house-silhouette-icon-building-transparent-background-home-icon.png"
-      }
-  ]
-  function isConditional(request_by){
-    if(request_by){
-        return <Card.Text className="small-text">*This coupon must be requested {request_by} in advance</Card.Text>
+    const [coupons, setCoupons] = useState([]);
+    useEffect(() => {
+        Axios.get("/api/coupons").then((response) => {
+            setCoupons(response.data.coupons);
+        });
+    }, []);
+
+    function isConditional(request_by) {
+        if (request_by) {
+            return <Card.Text className="small-text">*This coupon must be requested {request_by} in advance</Card.Text>
+        } else {
+            return <Card.Text/>
+        }
     }
-    else{
-        return <Card.Text/>
+
+    function updateCoupons(){
+        Axios.get("/api/coupons").then((response) => {
+            setCoupons(response.data.coupons);
+        });
     }
-  }
-  useEffect(() => {
-    Axios.get("/api/coupons").then((response) => {
-      setCoupons(response.data.coupons);
-    });
-  }, []);
-  console.log(coupons)
-  const couponList = coupons.map(c => {
-      return (
-          // <div className="App">
-          <Col lg={4} md={6} sm={12} className="bottom-buffer">
-              <Card className="h-100"
-                    bg={c.color}
-                    text={c.color === 'light' ? 'dark' : 'white'}
-              >
-                  <Card.Body className="flex-card">
-                      <Card.Title> {c.title}</Card.Title>
-                      <Row style={{height:"200px", marginTop:"10px"}}>
-                        <Card.Img className="mx-auto" style={{height:"80%", width:"auto"}} src={c.image}/>
-                      </Row>
-                      <Row  className="flexible" style={{marginTop:"5px"}}>
-                          <Card.Text>
-                              {c.desc}
-                          </Card.Text>
-                      </Row>
-                  </Card.Body>
-                  <Card.Footer>
-                      {isConditional(c.request_by)}
-                  </Card.Footer>
-              </Card>
-          </Col>
-      )
-  })
-  return (
-    <div className="App">
-      <Container>
-        <Row className="flex-container">
-            {couponList}
-        </Row>
-      </Container>
-    </div>
-  );
+    function redeemCoupon(c){
+        Axios.put('/api/redeem',
+            {id:c.id}
+        ).then(updateCoupons)
+    }
+
+    function createCountdown(date1, date2){
+        const diff = Math.abs(date2 - date1)
+        const cd = 24 * 60 * 60 * 1000
+        const ch = 60 * 60 * 1000
+        let days = Math.floor(diff / cd)
+        let hours = Math.floor((diff - days * cd) / ch)
+        let minutes = Math.round( (diff - days * cd - hours * ch) / 60000)
+        if( minutes === 60 ){
+            hours++;
+            minutes = 0;
+        }
+        if( hours === 24 ){
+            days++;
+            hours = 0;
+        }
+        let daySt = " days "
+        let hourSt = " hours "
+        let minSt = " minutes"
+        if (days === 1){
+            daySt = " day "
+        }
+        if (hours === 1){
+            hourSt = " hour "
+        }
+        if (minutes === 1){
+            minSt = " minute"
+        }
+        return days.toString() + daySt + hours.toString() + hourSt + minutes.toString() + minSt
+    }
+    const couponList = coupons.map(c => {
+        if(c.used){
+            return(
+                <Col lg={4} md={6} sm={12} className="bottom-buffer">
+                    <Card className="h-100"
+                          bg={c.color}
+                          text={c.color === 'light' ? 'dark' : 'white'}
+                    >
+                        <Card.Header style={{fontSize: "30px"}}>{c.title}</Card.Header>
+                        <Card.Img src={"https://www.clipartmax.com/png/full/147-1477125_book-a-birthday-party-or-rent-the-pavilion-more-confetti-png.png"}
+                                  style={{position:"absolute", top:"55px"}}
+                        />
+                        <Card.Img src={"https://www.clipartmax.com/png/full/147-1477125_book-a-birthday-party-or-rent-the-pavilion-more-confetti-png.png"}
+                                  style={{position:"absolute", bottom:"75px"}}
+                        />
+                        <Card.Img src={'https://www.clipartmax.com/png/full/121-1218350_happy-birthday-with-bunch-of-balloons-png-clip-art-happy-birthday-baloon.png'}
+                                  style={{position:"absolute", top:"100px", width:"60%", right:"20%",height:"auto"}}
+                        />
+                        <Card.Body className="flex-card">
+                            <Row style={{height: "200px", marginTop: "10px"}}>
+                            </Row>
+                            <Row className="flexible" style={{marginTop: "5px"}}>
+                            </Row>
+                            <Row style={{marginTop:"20px"}}>
+                                <Button
+                                    variant={c.color === 'light' ? 'dark' : 'light'}
+                                    onClick={() => redeemCoupon(c)}
+                                >
+                                <Card.Text style={{fontSize: "30px"}}>Coupon Redeemed</Card.Text>
+                                </Button>
+                            </Row>
+                        </Card.Body>
+                        <Card.Footer>
+                            <Card.Text className="small-text">Worth the wait?</Card.Text>
+                        </Card.Footer>
+                    </Card>
+
+                </Col>
+            )
+        }
+        let now = new Date()
+        let ptime = new Date(c.ptime)
+        console.log("NOW")
+        console.log(now)
+        console.log("PTIME")
+        console.log(ptime)
+        if(ptime > now){
+            return (
+                <Col lg={4} md={6} sm={12} className="bottom-buffer">
+                    <Card className="h-100"
+                          bg={c.color}
+                          text={c.color === 'light' ? 'dark' : 'white'}
+                    >
+                        <Card.Header>
+                            <Card.Text style={{fontSize: "25px"}}>{createCountdown(now, ptime)}</Card.Text>
+                        </Card.Header>
+                        <Card.Body className="flex-card blur">
+                            <Row style={{height: "200px", marginTop: "10px"}}>
+                                <Card.Img className="mx-auto" style={{height: "80%", width: "auto"}} src={c.image}/>
+                            </Row>
+                            <Row className="flexible" style={{marginTop: "5px"}}>
+                                <Card.Text>
+                                    {c.desc}
+                                </Card.Text>
+                            </Row>
+                            <Row style={{marginTop:"20px"}}>
+                                <Button
+                                    variant={c.color === 'light' ? 'dark' : 'light'}
+                                    onClick={() => redeemCoupon(c)}
+                                >
+                                    <Row>
+                                        <Col lg={2} md={2} sm={2}>
+                                            <FaCut size="45px" style={{marginLeft: "12px"}}/>
+                                        </Col>
+                                        <Col className="align-content-center" lg={8} md={8} sm={8}
+                                             style={{alignItems: "center"}}>
+                                            <Card.Text style={{fontSize: "30px"}}>Redeem</Card.Text>
+                                        </Col>
+                                    </Row>
+                                </Button>
+                            </Row>
+                        </Card.Body>
+                        <Card.Footer className="blur">
+                            {isConditional(c.request_by)}
+                        </Card.Footer>
+                    </Card>
+                </Col>
+
+            )
+        }
+        else{
+            return (
+                // <div className="App">
+                <Col lg={4} md={6} sm={12} className="bottom-buffer">
+                    <Card className="h-100"
+                          bg={c.color}
+                          text={c.color === 'light' ? 'dark' : 'white'}
+                    >
+                        <Card.Header style={{fontSize: "30px"}}>{c.title}</Card.Header>
+                        <Card.Body className="flex-card">
+                            <Row style={{height: "200px", marginTop: "10px"}}>
+                                <Card.Img className="mx-auto" style={{height: "80%", width: "auto"}} src={c.image}/>
+                            </Row>
+                            <Row className="flexible" style={{marginTop: "5px"}}>
+                                <Card.Text>
+                                    {c.desc}
+                                </Card.Text>
+                            </Row>
+                            <Row style={{marginTop:"20px"}}>
+                                <Button
+                                    variant={c.color === 'light' ? 'dark' : 'light'}
+                                    onClick={() => redeemCoupon(c)}
+                                >
+                                    <Row>
+                                        <Col lg={2} md={2} sm={2}>
+                                            <FaCut size="45px" style={{marginLeft: "12px"}}/>
+                                        </Col>
+                                        <Col className="align-content-center" lg={8} md={8} sm={8}
+                                             style={{alignItems: "center"}}>
+                                            <Card.Text style={{fontSize: "30px"}}>Redeem</Card.Text>
+                                        </Col>
+                                    </Row>
+                                </Button>
+                            </Row>
+                        </Card.Body>
+                        <Card.Footer>
+                            {isConditional(c.request_by)}
+                        </Card.Footer>
+                    </Card>
+                </Col>
+            )
+        }
+    })
+    return (
+        <div className="App">
+            <Container>
+                <Row className="flex-container">
+                    {couponList}
+                </Row>
+            </Container>
+        </div>
+    );
 }
 
 export default App;

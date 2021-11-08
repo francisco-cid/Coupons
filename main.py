@@ -1,21 +1,27 @@
-from flask import Flask, request, make_response
-from backend.models import app, db, Coupon
+from flask import Flask, request, render_template, make_response
+from backend.sample_coupons import sample_coupons
+from flask_cors import CORS
+
+app = Flask(__name__, static_folder="./build/static", template_folder="./build")
+CORS(app)
+
+coupons = sample_coupons.copy()
+
+@app.route('/', defaults={'path': ''})
+def index(path):
+    return render_template("index.html")
+
 #GET: returns all coupons in their db
 @app.route('/api/coupons', methods=['GET'])
 def get_coupons():
-    coupon_list = Coupon.query.order_by(Coupon.id).all()
-    response = list()
-    coupon_dict={}
-    for coupon in coupon_list:
-        coupon_dict["id"] = coupon.id
-        coupon_dict["title"] = coupon.title
-        coupon_dict["desc"] = coupon.desc
-        coupon_dict["request_by"] = coupon.request_by
-        coupon_dict["requested_for"] = coupon.requested_for
-        coupon_dict["used"] = coupon.used
-        coupon_dict["image"] = coupon.image
-        coupon_dict["color"] = coupon.color
-        response.append(coupon_dict.copy())
-    return make_response({'coupons':response},200)
+    return make_response({'coupons':coupons},200)
+
+@app.route('/api/redeem', methods=['PUT'])
+def redeem():
+    data = request.json
+    print(data)
+    coupons[data["id"] - 1]["used"] = True
+    return make_response({'coupons':coupons})
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8000, threaded=True, debug=True)
