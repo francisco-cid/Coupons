@@ -131,7 +131,6 @@ function App() {
                             <Row style={{marginTop:"20px"}}>
                                 <Button
                                     variant={c.color === 'light' ? 'dark' : 'light'}
-                                    onClick={() => redeemCoupon(c)}
                                 >
                                     <Row>
                                         <Col lg={2} md={2} sm={2}>
