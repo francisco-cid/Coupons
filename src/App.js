@@ -2,10 +2,15 @@ import './App.css';
 import Axios from 'axios';
 import React, {useState, useEffect} from "react";
 import 'bootstrap/dist/css/bootstrap.css';
+import Navbar from 'react-bootstrap/Navbar'
 import {FaCut} from 'react-icons/fa'
+import {MdOutlineCake} from 'react-icons/md'
 import {Card, Container, Row, Col, Button} from "react-bootstrap";
 
+//server address
 Axios.defaults.baseURL = 'http://54.85.18.85:8080';
+//local address
+// Axios.defaults.baseURL = 'http://localhost:8080';
 
 function App() {
     const [coupons, setCoupons] = useState([]);
@@ -197,6 +202,15 @@ function App() {
     })
     return (
         <div className="App">
+            <Container>
+                <Navbar className="uvs-left justify-content-center" style={{marginBottom:"10px", marginTop:"10px", backgroundColor:"#E99DE3"}}>
+                    <div className="text-white" style={{fontSize:"30px"}}>
+                        <MdOutlineCake size="45px" style={{paddingRight:"5px"}}/>
+                        Happy 23 days of Ava!
+                        <MdOutlineCake size="45px" style={{paddingLeft:"5px"}}/>
+                    </div>
+                </Navbar>
+            </Container>
             <Container>
                 <Row className="flex-container">
                     {couponList}
